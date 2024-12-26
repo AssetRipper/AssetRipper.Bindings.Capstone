@@ -1,0 +1,29 @@
+namespace AssetRipper.Bindings.Capstone;
+
+public enum cs_arch
+{
+    CS_ARCH_ARM = 0,
+    CS_ARCH_AARCH64 = 1,
+    CS_ARCH_SYSTEMZ = 2,
+    CS_ARCH_MIPS,
+    CS_ARCH_X86,
+    CS_ARCH_PPC,
+    CS_ARCH_SPARC,
+    CS_ARCH_XCORE,
+    CS_ARCH_M68K,
+    CS_ARCH_TMS320C64X,
+    CS_ARCH_M680X,
+    CS_ARCH_EVM,
+    CS_ARCH_MOS65XX,
+    CS_ARCH_WASM,
+    CS_ARCH_BPF,
+    CS_ARCH_RISCV,
+    CS_ARCH_SH,
+    CS_ARCH_TRICORE,
+    CS_ARCH_ALPHA,
+    CS_ARCH_HPPA,
+    CS_ARCH_LOONGARCH,
+    CS_ARCH_XTENSA,
+    CS_ARCH_MAX,
+    CS_ARCH_ALL = 0xFFFF,
+}

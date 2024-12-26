@@ -1,0 +1,31 @@
+namespace AssetRipper.Bindings.Capstone;
+
+public enum ppc_insn_group
+{
+    PPC_GRP_INVALID = 0,
+    PPC_GRP_JUMP,
+    PPC_GRP_CALL,
+    PPC_GRP_INT = 4,
+    PPC_GRP_PRIVILEGE = 6,
+    PPC_GRP_BRANCH_RELATIVE,
+    PPC_FEATURE_IsNotISAFuture = 128,
+    PPC_FEATURE_IsISA3_0,
+    PPC_FEATURE_In64BitMode,
+    PPC_FEATURE_In32BitMode,
+    PPC_FEATURE_PCRelativeMemops,
+    PPC_FEATURE_HasBPERMD,
+    PPC_FEATURE_HasSPE,
+    PPC_FEATURE_IsE500,
+    PPC_FEATURE_IsPPC4xx,
+    PPC_FEATURE_HasExtDiv,
+    PPC_FEATURE_IsISAFuture,
+    PPC_FEATURE_HasFPU,
+    PPC_FEATURE_HasICBT,
+    PPC_FEATURE_HasPartwordAtomics,
+    PPC_FEATURE_IsISA2_06,
+    PPC_FEATURE_IsBookE,
+    PPC_FEATURE_HasPS,
+    PPC_FEATURE_HasQPX,
+    PPC_FEATURE_IsPPC6xx,
+    PPC_GRP_ENDING,
+}

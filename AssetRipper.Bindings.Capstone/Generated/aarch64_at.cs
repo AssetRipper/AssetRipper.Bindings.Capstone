@@ -1,0 +1,23 @@
+namespace AssetRipper.Bindings.Capstone;
+
+public enum aarch64_at
+{
+    AARCH64_AT_S12E0R = 0x23c6,
+    AARCH64_AT_S12E0W = 0x23c7,
+    AARCH64_AT_S12E1R = 0x23c4,
+    AARCH64_AT_S12E1W = 0x23c5,
+    AARCH64_AT_S1E0R = 0x3c2,
+    AARCH64_AT_S1E0W = 0x3c3,
+    AARCH64_AT_S1E1A = 0x3ca,
+    AARCH64_AT_S1E1R = 0x3c0,
+    AARCH64_AT_S1E1RP = 0x3c8,
+    AARCH64_AT_S1E1W = 0x3c1,
+    AARCH64_AT_S1E1WP = 0x3c9,
+    AARCH64_AT_S1E2A = 0x23ca,
+    AARCH64_AT_S1E2R = 0x23c0,
+    AARCH64_AT_S1E2W = 0x23c1,
+    AARCH64_AT_S1E3A = 0x33ca,
+    AARCH64_AT_S1E3R = 0x33c0,
+    AARCH64_AT_S1E3W = 0x33c1,
+    AARCH64_AT_ENDING,
+}
