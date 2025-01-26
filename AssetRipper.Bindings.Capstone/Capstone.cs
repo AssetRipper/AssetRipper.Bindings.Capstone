@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Bindings.Capstone.Instructions;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace AssetRipper.Bindings.Capstone;
@@ -48,32 +49,61 @@ public partial class Capstone
 		}
 	}
 
-	public static unsafe List<T> Iterate<T>(ReadOnlySpan<byte> data, int start, ulong address, cs_mode mode = default) where T : IInstruction<T>
+	public static IEnumerable<T> Iterate<T>(byte[] data, int start, ulong address, cs_mode mode = default) where T : IInstruction<T>
 	{
-		nuint handle = default;
-		cs_open(T.Architecture, mode, &handle).ThrowOnFailure();
-		try
+		int offset = start;
+		cs_insn insn = default;
+		while (true)
 		{
-			cs_option(handle, cs_opt_type.CS_OPT_DETAIL, cs_opt_value.CS_OPT_ON).ThrowOnFailure();
-
-			List<T> result = new();
-			fixed (byte* dataPtr = data)
+			if (_helper(data, ref offset, ref address, ref insn, mode))
 			{
-				byte* position = dataPtr + start;
-				nuint size = default;
-				cs_insn insn = default;
-				while (cs_disasm_iter(handle, &position, &size, &address, &insn))
-				{
-					result.Add(T.FromNative(insn));
-				}
+				yield return T.FromNative(insn);
 			}
+			else
+			{
+				break;
+			}
+		}
 
-			return result;
-		}
-		finally
+		static unsafe bool _helper(byte[] data, ref int offset, ref ulong address, ref cs_insn insn, cs_mode mode)
 		{
-			cs_close(&handle).ThrowOnFailure();
+			cs_open(T.Architecture, mode, out nuint handle).ThrowOnFailure();
+			cs_insn* insn2 = cs_malloc(handle);
+			try
+			{
+				cs_option(handle, cs_opt_type.CS_OPT_DETAIL, cs_opt_value.CS_OPT_ON).ThrowOnFailure();
+
+				if (insn2 == null)
+					throw new();
+
+				bool success;
+				fixed (byte* dataPtr = data)
+				{
+					byte* position = dataPtr + offset;
+					nuint size = (nuint)(data.Length);
+					success = cs_disasm_iter(handle, &position, &size, (ulong*)Unsafe.AsPointer(ref address), insn2);
+					insn = *insn2;
+					offset = (int)(position - dataPtr);
+				}
+				return success;
+			}
+			finally
+			{
+				cs_free(insn2, 1);
+				cs_close(ref handle).ThrowOnFailure();
+			}
 		}
+	}
+
+	public static unsafe cs_err cs_open(cs_arch arch, cs_mode mode, out nuint handle)
+	{
+		handle = default;
+		return cs_open(arch, mode, (nuint*)Unsafe.AsPointer(ref handle));
+	}
+
+	public static unsafe cs_err cs_close(ref nuint handle)
+	{
+		return cs_close((nuint*)Unsafe.AsPointer(ref handle));
 	}
 
 	public static cs_err cs_option(nuint handle, cs_opt_type type, cs_opt_value value)
